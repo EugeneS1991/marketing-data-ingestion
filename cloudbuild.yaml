@@ -1,0 +1,17 @@
+steps:
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args:
+  - gcloud
+  - functions
+  - deploy
+  - marketing-data-ingestion
+  - --region=europe-west1
+  - --runtime=python314
+  - --entry-point=main_handler
+  - --trigger-http
+  - --memory=4096MB
+  - --timeout=540s
+  - --no-allow-unauthenticated
+  - --min-instances=0
+  - --max-instances=1
+  - --source=.

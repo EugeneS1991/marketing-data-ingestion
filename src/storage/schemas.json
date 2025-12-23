@@ -1,0 +1,361 @@
+[
+  {
+    "name": "dateCreated",
+    "type": "DATE",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "appName",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "location",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "country",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "state",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "city",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "zipcode",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "latitude",
+        "type": "FLOAT",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "longitude",
+        "type": "FLOAT",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "duration",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "suppressedMessage",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "suppressedReason",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "created",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "browser",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "name",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "family",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "producer",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "producerUrl",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "type",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "url",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "version",
+        "type": "STRING",
+        "mode": "repeated"
+      }
+    ]
+  },
+  {
+    "name": "deviceType",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "userAgent",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "type",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "portalId",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "sentBy",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "id",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "created",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "smtpId",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "recipient",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "filteredEvent",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "appId",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "emailCampaignId",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "attempt",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "response",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "from",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "replyTo",
+    "type": "STRING",
+    "mode": "repeated"
+  },
+  {
+    "name": "cc",
+    "type": "STRING",
+    "mode": "REPEATED"
+  },
+  {
+    "name": "bcc",
+    "type": "STRING",
+    "mode": "REPEATED"
+  },
+  {
+    "name": "subject",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "referer",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "linkId",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "url",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "emailCampaignGroupId",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "causedBy",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "id",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "created",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "source",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "subscriptions",
+    "type": "RECORD",
+    "mode": "REPEATED",
+    "fields": [
+      {
+        "name": "id",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "status",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "legalBasisChange",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+          {
+            "name": "legalBasisType",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          },
+          {
+            "name": "legalBasisExplanation",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          },
+          {
+            "name": "optState",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "sourceId",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "portalSubscriptionStatus",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "dropMessage",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "dropReason",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "category",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "status",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "requestedBy",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "bounced",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "obsoletedBy",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+      {
+        "name": "id",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "created",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "_row_ids",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "_inserted_at_utc",
+    "type": "DATE",
+    "mode": "NULLABLE"
+  }
+]
