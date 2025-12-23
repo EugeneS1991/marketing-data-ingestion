@@ -9,8 +9,9 @@ steps:
   - --runtime=python314
   - --entry-point=main_handler
   - --trigger-http
-  - --memory=4096MB
+  - --memory=512MB
   - --timeout=540s
+  - --ingress-settings=all
   - --no-allow-unauthenticated
   - --min-instances=0
   - --max-instances=1

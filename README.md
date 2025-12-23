@@ -20,13 +20,23 @@ Currently, the following integrations are available:
 ## Setup & Deployment Instructions
 
 ### 1. Deploy the Cloud Function
-The deployment is managed via Google Cloud Build. Ensure your GCP CLI is configured and run:
+You can deploy the function directly from your terminal using the following gcloud CLI command. Ensure you are in the project root directory:
 
 ```bash
-gcloud builds submit --config cloudbuild.yaml .
+gcloud functions deploy marketing-data-ingestion \
+  --region=europe-west1 \
+  --runtime=python311 \
+  --entry-point=main_handler \
+  --trigger-http \
+  --memory=4096MB \
+  --timeout=540s \
+  --no-allow-unauthenticated \
+  --min-instances=0 \
+  --max-instances=1 \
+  --source=.
 ```
 
-This will deploy a Cloud Function named `marketing-data-ingestion`. Once completed, the CLI or GCP Console will provide an **HTTP Trigger URL**. Take note of this URL.
+This command configures the function to be triggered via HTTP, sets a memory limit of 4GB, and secures it to only allow authenticated calls (perfect for Cloud Scheduler).
 
 ### 2. Configure Cloud Scheduler
 Navigate to **Cloud Scheduler** in the GCP Console and create a new job for each data collection you want to sync.
