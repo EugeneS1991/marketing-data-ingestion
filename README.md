@@ -96,7 +96,11 @@ gcloud scheduler jobs create http sync-hubspot-events `
 
 ```
 
-### Method 2: Create via Cloud Console (Manual)
+*If successful, you will see a confirmation in your terminal, and the job will appear in the Cloud Console:*
+![Created Scheduler](image/created_scheduler.png)
+
+### Method 2: Create via Cloud Console (UI Interface)
+If you prefer using the Google Cloud Console interface, follow these steps:
 1. Navigate to **Cloud Scheduler** in the GCP Console.
 2. Click **Create Job**.
 3. **Frequency**: e.g., `0 2 * * *` (Daily at 2 AM).
