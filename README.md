@@ -11,93 +11,103 @@ Currently, the following integrations are available:
 
 ## Cloud Services Stack
 - **Google Cloud Functions (GCF)**: Executes the Python logic (Runtime: Python 3.11).
-- **Google Cloud Scheduler**: Automates the trigger of the GCF via HTTP POST requests on a specified schedule (e.g., daily at 2:00 AM).
+- **Google Cloud Scheduler**: Automates the trigger of the GCF via HTTP POST requests on a specified schedule.
 - **Google BigQuery**: Serves as the data warehouse for all ingested marketing metrics.
-- **Google Cloud Build**: Automates the deployment process.
 
 ---
 
-## Setup & Deployment Instructions
+## Deployment Instructions
 
-### 1. Deploy the Cloud Function
-You can deploy the function directly from your terminal using the following gcloud CLI command. Ensure you are in the project root directory:
+### Method 1: Deploy via CLI (Command Line Interface)
 
-```bash
-gcloud functions deploy marketing-data-ingestion \
-  --region=europe-west1 \
-  --runtime=python311 \
-  --entry-point=main_handler \
-  --trigger-http \
-  --memory=4096MB \
-  --timeout=540s \
-  --no-allow-unauthenticated \
-  --min-instances=0 \
-  --max-instances=1 \
-  --source=.
-```
+1. **Install Google Cloud CLI**: Download and install the [Google Cloud CLI](https://cloud.google.com/sdk/docs/install).
+2. **Authenticate**: Open your terminal and log in to your Google Account:
+   ```powershell
+   gcloud auth login
+   ```
+3. **Set Project**: Ensure you are working in the correct GCP project:
+   ```powershell
+   gcloud config set project YOUR_PROJECT_ID
+   ```
+4. **Deploy the Function**: Run the following command from the project root directory:
+   ```powershell
+   gcloud functions deploy marketing-data-ingestion `
+     --gen2 `
+     --region=europe-west1 `
+     --runtime=python311 `
+     --entry-point=main_handler `
+     --trigger-http `
+     --memory=512Mi `
+     --timeout=540s `
+     --ingress-settings=all `
+     --no-allow-unauthenticated `
+     --min-instances=0 `
+     --max-instances=1 `
+     --source=.
+   ```
+   *Note: If the deployment is successful, you will see the function details in your terminal:*
+   ![Deployment Success](image/setup_function.png)
 
-This command configures the function to be triggered via HTTP, sets a memory limit of 4GB, and secures it to only allow authenticated calls (perfect for Cloud Scheduler).
+### Method 2: Deploy via Cloud Build (Automated Triggers)
 
-### 2. Configure Cloud Scheduler
-Navigate to **Cloud Scheduler** in the GCP Console and create a new job for each data collection you want to sync.
+1. **Connect Repository**:
+   - Go to the **Cloud Build** section in GCP Console.
+   - Navigate to **Triggers** and click **Connect Repository**.
+   - Select **GitHub (Cloud Build GitHub App)**, authenticate, and select your account and repository.
+   ![Connect Repository](image/connect_repo.png)
 
-**Settings:**
-- **Frequency**: e.g., `0 2 * * *` (Daily at 2 AM).
+2. **Create Trigger**:
+   - Click **Create Trigger**.
+   - **Name**: Enter a name for the trigger.
+   - **Region**: Select your preferred region.
+   - **Event**: Push to a branch.
+   - **Source**: Select your repository and the `main` branch.
+   - **Configuration**: Select **Cloud Build configuration file (yaml or json)**.
+   ![Cloud Build Settings](image/cloud_build_set.png)
+   - Click **Create**.
+
+3. **Run Trigger**:
+   - You can manually start the deployment by clicking **Run** on the created trigger.
+   ![Run Trigger](image/run_trigger.png)
+
+4. **Verify Deployment**:
+   - Go to the **History** tab in Cloud Build to ensure the build finished successfully.
+   ![Deployment History](image/deployed.png)
+
+---
+
+## Setup Cloud Scheduler
+Once the function is deployed, create a job in **Cloud Scheduler**:
 - **Target Type**: HTTP.
-- **URL**: Paste the URL of your deployed Cloud Function.
+- **URL**: Your Cloud Function URL.
 - **HTTP Method**: POST.
-- **Auth Header**: Select "Add OIDC token" (Use a service account with `Cloud Functions Invoker` permissions).
+- **Auth Header**: Add OIDC token (with `Cloud Functions Invoker` role).
 
----
+### Example Payloads (JSON Body)
 
-## Request Payloads (JSON Body)
-
-Pass the following JSON in the Body of the Cloud Scheduler job to trigger specific syncs.
-
-### HubSpot Sync Request
+#### HubSpot Sync
 ```json
 {
   "source": "hubspot",
   "collection": "email_event",
-  "access_token": "your_private_app_token",
-  "project_id": "gcp-project-id",
+  "access_token": "your_token",
+  "project_id": "your_project",
   "dataset_id": "marketing_dataset",
-  "table_id": "hubspot_raw_events",
-  "sync_from": "2023-12-01",
-  "sync_to": "2023-12-22"
+  "table_id": "hubspot_events"
 }
 ```
-*Fields:*
-- `source`: Must be `"hubspot"`.
-- `collection`: Either `"email_event"` or `"email_campaign"`.
-- `access_token`: HubSpot Private App Access Token.
-- `project_id`, `dataset_id`, `table_id`: BigQuery destination details.
-- `sync_from` / `sync_to`: (Optional) Format `YYYY-MM-DD`. Defaults to Yesterday if omitted.
 
-### Facebook Sync Request
+#### Facebook Sync
 ```json
 {
   "source": "facebook",
   "collection": "insights",
-  "access_token": "your_marketing_api_token",
-  "account_id": "1234567890",
-  "app_id": "fb_app_id",
-  "app_secret": "fb_app_secret",
-  "project_id": "gcp-project-id",
+  "access_token": "your_token",
+  "account_id": "12345",
+  "app_id": "app_id",
+  "app_secret": "app_secret",
+  "project_id": "your_project",
   "dataset_id": "marketing_dataset",
-  "table_id": "facebook_daily_insights"
+  "table_id": "fb_insights"
 }
 ```
-*Fields:*
-- `source`: Must be `"facebook"`.
-- `collection`: Currently supports `"insights"`.
-- `account_id`: Your Facebook Ad Account ID (without `act_` prefix).
-- `app_id` & `app_secret`: Your Facebook Developer App credentials.
-- `sync_from` / `sync_to`: (Optional) Daily loop iterates between these dates.
-
----
-
-## Technical Features
-- **Day-by-Day Iteration**: To avoid memory limits and API timeouts, large date ranges are automatically split into single-day requests.
-- **Auto-Schema Management**: Automatically creates BigQuery tables with correct schemas, partitioning (by date), and clustering if they don't exist.
-- **Reliable Logging**: Structured logging provides clear visibility into which date/collection is currently processing.
