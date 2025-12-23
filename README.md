@@ -77,11 +77,43 @@ Currently, the following integrations are available:
 ---
 
 ## Setup Cloud Scheduler
-Once the function is deployed, create a job in **Cloud Scheduler**:
-- **Target Type**: HTTP.
-- **URL**: Your Cloud Function URL.
-- **HTTP Method**: POST.
-- **Auth Header**: Add OIDC token (with `Cloud Functions Invoker` role).
+Once the function is deployed, you need to create a job to trigger it.
+
+### Method 1: Create via CLI (Recommended for Automation)
+To create a job through the terminal, use the following command. Note that you need to escape double quotes in the JSON body for PowerShell.
+
+```powershell
+# Get your function URL first
+$FUNCTION_URL = $(gcloud functions describe marketing-data-ingestion --gen2 --region=europe-west1 --format="value(serviceConfig.uri)")
+
+# Create the job
+gcloud scheduler jobs create http sync-hubspot-events `
+  --location=europe-west1 `
+  --schedule="0 2 * * *" `
+  --uri=$FUNCTION_URL `
+  --http-method=POST `
+  --message-body='{\"source\": \"hubspot\", \"collection\": \"email_event\", \"access_token\": \"your_token\", \"project_id\": \"your_project\", \"dataset_id\": \"marketing_dataset\", \"table_id\": \"hubspot_events\"}'
+
+```
+
+### Method 2: Create via Cloud Console (Manual)
+1. Navigate to **Cloud Scheduler** in the GCP Console.
+2. Click **Create Job**.
+3. **Frequency**: e.g., `0 2 * * *` (Daily at 2 AM).
+4. **Target Type**: HTTP.
+5. **URL**: Your Cloud Function URL.
+6. **HTTP Method**: POST.
+7. **Auth Header**: Select "Add OIDC token".
+8. **Service Account**: Choose an account with `Cloud Functions Invoker` role.
+
+---
+
+> [!IMPORTANT]
+> **BigQuery Setup**:
+> 1. You **MUST** manually create the **Dataset** in BigQuery before running the sync.
+> 2. Do **NOT** create the **Table** manually. The application will automatically create the table with the correct schema, partitioning, and clustering based on the name you provide in `table_id`.
+
+
 
 ### Example Payloads (JSON Body)
 
