@@ -46,7 +46,7 @@ Currently, the following integrations are available:
      --source=.
    ```
    *Note: If the deployment is successful, you will see the function details in your terminal:*
-   ![Deployment Success](image/setup_function.png)
+   ![Deployment Success](image/setup_functions.png)
 
 ### Method 2: Deploy via Cloud Build (Automated Triggers)
 
